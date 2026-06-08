@@ -8,15 +8,35 @@ The project investigates whether a V-JEPA 2.1 video foundation model can be fine
 
 ## Repository Scope
 
-This repository is intended to provide the code necessary to understand and reproduce the main training/evaluation pipeline.
+This repository is intended to provide the code and documentation necessary to understand the main training/evaluation pipeline.
 
-Only the main training script is included:
+The repository publicly includes:
 
 ```text
 train_vjepa21_7fields_collision_for_v2_supervised.py
+README.md
+LICENSE
 ```
 
-The dataset, processed frames, semantic label files, split files, model checkpoints, and experiment outputs are **not redistributed** in this repository.
+The dataset, processed frames, semantic label files, train/validation/test split files, model checkpoints, and experiment outputs are **not redistributed** in this repository because they are derived from or depend on externally licensed resources.
+
+## Data and Annotation Availability
+
+The raw videos used in this project come from the **Nexar Dashcam Collision Prediction Dataset**, which is governed by the **Nexar Open Data License**. Therefore, the raw dataset and extracted frame files are not publicly redistributed in this repository.
+
+In addition, the semantic labels used in this project were generated and refined for the Nexar video windows. Because these labels are directly tied to Nexar clip identifiers, frame indices, and processed video windows, they are not publicly uploaded as part of this repository.
+
+For academic review or reproducibility verification, the following materials may be shared privately upon reasonable request, subject to dataset license restrictions:
+
+- semantic label schema
+- example annotation rows
+- preprocessing details
+- train/validation/test split format
+- command-line configuration used for the main reported run
+- evaluation output format
+- limited metadata needed to verify the reported experimental pipeline
+
+Requests can be made by contacting the repository owner. The requester may be required to separately obtain the Nexar dataset and V-JEPA 2.1 checkpoint according to their respective licenses.
 
 ## Project Summary
 
@@ -73,6 +93,105 @@ The script uses the following semantic fields:
 | PATH | Path relation | in_path, entering_path, crossing_path, parallel_adjacent, none |
 | GAP | Gap trend | closing, stable_gap, none |
 | LATORIG | Lateral origin | left, right, none |
+
+## Semantic Label Format
+
+The training script expects one JSON object per line in the semantic label file.
+
+Default path:
+
+```text
+output2/labels_for_vjepa_v2_supervised.jsonl
+```
+
+Each row should contain at least the following fields:
+
+```json
+{
+  "category": "crash",
+  "clip_name": "example_clip",
+  "target_frame_idx": 10,
+  "frame_indices": [0, 5, 10],
+  "alert": "alert",
+  "analysis": {
+    "fields": {
+      "primary_hazard_type": "car",
+      "hazard_position": "ego_lane_front",
+      "hazard_motion_state": "stationary",
+      "hazard_proximity": "very_close",
+      "path_relation": "in_path",
+      "gap_trend": "closing",
+      "lateral_origin": "none"
+    }
+  }
+}
+```
+
+The labels used in the project were produced using representative frames from each window and then manually refined.
+
+## Train/Validation/Test Split Format
+
+The split file is expected at:
+
+```text
+data/train_test_clips_for_vjepa2.jsonl
+```
+
+Each row should contain:
+
+```json
+{
+  "split": "train",
+  "category": "crash",
+  "clip_name": "example_clip"
+}
+```
+
+The training script uses this file to assign each clip to the train, validation, or test split.
+
+## Frame Directory Format
+
+The extracted frames are expected under:
+
+```text
+data/frames/
+```
+
+Expected layout:
+
+```text
+data/frames/
+├── crash/
+│   └── <clip_name>/
+│       ├── 00000.jpg
+│       ├── 00001.jpg
+│       └── ...
+└── normal/
+    └── <clip_name>/
+        ├── 00000.jpg
+        ├── 00001.jpg
+        └── ...
+```
+
+## Preprocessing Summary
+
+The main preprocessing procedure used in the project is:
+
+1. Crop crash videos to the final 5 seconds before the collision timestamp.
+2. Sample 5-second clips from normal videos using a fixed random seed.
+3. Down-sample clips to 10 Hz.
+4. Construct 1-second temporal windows with a stride of 0.5 seconds.
+5. Use 11 frames per window.
+6. Assign each window an alert/no-alert label.
+7. Generate and refine seven semantic field labels for each window.
+
+The resulting split used for the main reported experiment contained:
+
+```text
+train windows: 8091
+validation windows: 2700
+test windows: 2691
+```
 
 ## Expected Data Layout
 
@@ -149,58 +268,6 @@ external/vjepa2_official/
 ```
 
 The script imports V-JEPA 2.1 modules from that local directory.
-
-## Required Local Files
-
-Before running the script, prepare the following files locally:
-
-### 1. Semantic label file
-
-Default path:
-
-```text
-output2/labels_for_vjepa_v2_supervised.jsonl
-```
-
-### 2. Split file
-
-Default path:
-
-```text
-data/train_test_clips_for_vjepa2.jsonl
-```
-
-### 3. Frame directory
-
-Default path:
-
-```text
-data/frames/
-```
-
-Expected frame layout:
-
-```text
-data/frames/
-├── crash/
-│   └── <clip_name>/
-│       ├── 00000.jpg
-│       ├── 00001.jpg
-│       └── ...
-└── normal/
-    └── <clip_name>/
-        ├── 00000.jpg
-        ├── 00001.jpg
-        └── ...
-```
-
-### 4. V-JEPA 2.1 checkpoint
-
-Default path:
-
-```text
-checkpoints/vjepa2_1/vjepa2_1_vitl_dist_vitG_384.pt
-```
 
 ## Training
 
@@ -305,14 +372,6 @@ freeze_backbone: 0
 processor_crop_size: 384
 ```
 
-The dataset split contained:
-
-```text
-train windows: 8091
-validation windows: 2700
-test windows: 2691
-```
-
 ## Main Reported Results
 
 The main report used V-JEPA 2.1 300M with a collision head and seven semantic heads.
@@ -324,19 +383,18 @@ mTTA: 1.865 s
 Mean semantic field accuracy: 0.787
 ```
 
-## Limitations
+## Reproducibility Notes
 
-This repository does not include:
+This repository does not include all files required to run the experiment directly after cloning. To reproduce the full experiment, users must separately prepare:
 
-- Nexar raw videos
-- extracted frames
-- semantic annotation files
-- train/validation/test split files
-- V-JEPA 2.1 checkpoints
-- trained checkpoints
-- generated experiment outputs
+- the Nexar dataset
+- extracted 10 Hz frame directories
+- semantic annotation JSONL file
+- train/validation/test split JSONL file
+- V-JEPA 2.1 official repository
+- V-JEPA 2.1 pretrained checkpoint
 
-Therefore, the code cannot be executed directly after cloning unless the required dataset, annotations, frames, V-JEPA 2.1 checkpoint, and official V-JEPA 2.1 repository are prepared locally.
+This restriction is due to dataset and model licensing constraints, not because the training or evaluation procedure is intentionally hidden.
 
 ## License
 
