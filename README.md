@@ -20,23 +20,31 @@ LICENSE
 
 The dataset, processed frames, semantic label files, train/validation/test split files, model checkpoints, and experiment outputs are **not redistributed** in this repository because they are derived from or depend on externally licensed resources.
 
-## Data and Annotation Availability
+## Dataset and Annotation Availability
 
-The raw videos used in this project come from the **Nexar Dashcam Collision Prediction Dataset**, which is governed by the **Nexar Open Data License**. Therefore, the raw dataset and extracted frame files are not publicly redistributed in this repository.
+This project uses the **Nexar Collision Prediction Dataset**.
 
-In addition, the semantic labels used in this project were generated and refined for the Nexar video windows. Because these labels are directly tied to Nexar clip identifiers, frame indices, and processed video windows, they are not publicly uploaded as part of this repository.
+The dataset is licensed by Nexar Inc. under the Nexar Open Data License. The license permits use, copying, modification, and redistribution of the dataset, provided that the required attribution, copyright notice, license conditions, disclaimers, no-resale condition, and ethical use restrictions are preserved.
 
-For academic review or reproducibility verification, the following materials may be shared privately upon reasonable request, subject to dataset license restrictions:
+Although redistribution is conditionally permitted by the dataset license, this repository does **not** redistribute the raw Nexar videos, extracted frames, processed clips, semantic annotation files, or train/validation/test split files. Users who wish to reproduce the experiments should obtain the Nexar dataset directly from the official source and comply with the Nexar Open Data License.
 
-- semantic label schema
-- example annotation rows
-- preprocessing details
-- train/validation/test split format
-- command-line configuration used for the main reported run
-- evaluation output format
-- limited metadata needed to verify the reported experimental pipeline
+Required attribution for the Nexar dataset:
 
-Requests can be made by contacting the repository owner:minjun9282@khu.ac.kr. The requester may be required to separately obtain the Nexar dataset and V-JEPA 2.1 checkpoint according to their respective licenses.
+> Moura, Daniel C., and Zvitia, Orly. "Nexar Collison Dataset." Hugging Face, 2025, https://huggingface.co/datasets/nexar-ai/nexar_collision_prediction.
+
+The semantic labels used in this project were generated and refined for window-level samples derived from the Nexar videos. Because these labels are tied to Nexar clip identifiers, frame indices, and processed video windows, they are not publicly uploaded in this repository.
+
+For academic review or reproducibility verification, the following materials may be shared privately upon reasonable request, subject to the Nexar Open Data License and other applicable license terms:
+
+* semantic label schema
+* example annotation rows
+* preprocessing details
+* train/validation/test split format
+* command-line configuration used for the main reported run
+* evaluation output format
+* limited metadata needed to verify the reported experimental pipeline
+
+Requests can be made by contacting the repository owner: [minjun9282@khu.ac.kr](mailto:minjun9282@khu.ac.kr). The requester may be required to separately obtain the Nexar dataset and the V-JEPA 2.1 checkpoint according to their respective licenses.
 
 ## Project Summary
 
@@ -401,24 +409,31 @@ This restriction is due to dataset and model licensing constraints, not because 
 
 The source code in this repository is licensed under the **MIT License**.
 
-This project utilizes **Meta V-JEPA 2.1**, which is restricted to non-commercial research use under the **CC-BY-NC 4.0 license**.
+This project uses **Meta V-JEPA 2.1**, which is restricted to non-commercial research use under the **CC-BY-NC 4.0 license**. The V-JEPA 2.1 model weights are not redistributed in this repository.
 
-The dataset used is the **Nexar Collision Prediction Dataset**, governed by the **Nexar Open Data License**.
+This project also uses the **Nexar Collision Prediction Dataset**, which is governed by the **Nexar Open Data License**. The Nexar dataset is not redistributed in this repository. Users are responsible for obtaining the dataset from the official source and complying with the license terms.
 
-The dataset, processed data, annotations, V-JEPA 2.1 weights, and trained checkpoints are not redistributed in this repository. Users are responsible for obtaining and using each resource according to its respective license.
+The Nexar Open Data License requires proper attribution to Nexar Inc., retention of the copyright notice and disclaimers upon redistribution, prohibits resale or redistribution for profit without prior written consent, and restricts uses involving malicious systems, manipulated media or misinformation, privacy violations, weaponization, exploitative practices, or violations of applicable laws.
+
+The dataset, processed frames, semantic annotations, V-JEPA 2.1 weights, and trained checkpoints are not included in this repository.
 
 ## Citation
 
-If this repository is useful for your work, please cite the related dataset and model papers:
+If this repository is useful for your work, please cite the related dataset and model papers.
+
+For the Nexar dataset, use the attribution required by the Nexar Open Data License:
 
 ```bibtex
-@inproceedings{moura2025nexar,
-  title={Nexar Dashcam Collision Prediction Dataset and Challenge},
-  author={Moura, T. and others},
-  booktitle={CVPR Workshops},
-  year={2025}
+@misc{moura2025nexar,
+  title={Nexar Collison Dataset},
+  author={Moura, Daniel C. and Zvitia, Orly},
+  howpublished={Hugging Face},
+  year={2025},
+  url={https://huggingface.co/datasets/nexar-ai/nexar_collision_prediction}
 }
+```
 
+```bibtex
 @article{murlabadia2026vjepa21,
   title={V-JEPA 2.1: Unlocking Dense Features in Video Self-Supervised Learning},
   author={Mur-Labadia, L. and others},
@@ -433,3 +448,4 @@ If this repository is useful for your work, please cite the related dataset and 
   year={2025}
 }
 ```
+
