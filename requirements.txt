@@ -1,0 +1,82 @@
+# Requirements for reproducing the V-JEPA2.1 300M basic supervised run
+# Run directory:
+#   out_score/vjepa21_7fields_collision_for_v2_supervised_wf11_e20_bs4_acc16_es5_best_ap_semantic_official21_20260407
+# Training script:
+#   scripts/train_vjepa21_7fields_collision_for_v2_supervised.py
+#
+# Reference environment observed on this server:
+#   Python 3.10.19
+#   PyTorch 2.9.0, torchvision 0.24.0, CUDA runtime 12.8
+#   GPU used in the original run_meta: cuda:0
+#   Note: current project policy may avoid GPU 0 if that device is unstable.
+#
+# Non-pip prerequisites that must exist in the project tree:
+#   external/vjepa2_official
+#     Official V-JEPA2 repo used through sys.path imports:
+#       evals.video_classification_frozen.utils.make_transforms
+#       src.hub.backbones.vjepa2_1_vit_large_384
+#   checkpoints/vjepa2_1/vjepa2_1_vitl_dist_vitG_384.pt
+#     V-JEPA2.1 ViT-L dist-to-ViT-G 384 checkpoint, loaded from key ema_encoder.
+#   output2/labels_for_vjepa_v2_supervised.jsonl
+#   data/train_test_clips_for_vjepa2.jsonl
+#   data/frames/{crash,normal}/...
+#
+# Install note:
+#   If installing PyTorch from scratch, choose the wheel/index matching the local CUDA driver.
+#   The observed environment used torch==2.9.0 with CUDA 12.8.
+
+# Core deep learning stack
+torch==2.9.0
+torchvision==0.24.0
+torchaudio==2.9.0
+
+# Numeric / metrics / image loading
+numpy==2.2.6
+scipy==1.15.3
+scikit-learn==1.7.2
+pillow==12.1.0
+opencv-python==4.12.0.88
+opencv-python-headless==4.12.0.88
+pandas==2.3.3
+tqdm==4.67.1
+
+# V-JEPA official repo / model utility dependencies used by this project
+transformers==4.57.6
+huggingface-hub==0.36.0
+safetensors==0.7.0
+timm==1.0.26
+einops==0.8.1
+PyYAML==6.0.3
+packaging==25.0
+requests==2.32.5
+
+# The basic run does not use LoRA, but the training script imports peft.
+# Keep this installed so the script imports cleanly.
+peft==0.18.1
+accelerate==1.12.0
+
+# Plotting / analysis helpers used by follow-up evaluation and t-SNE reports
+matplotlib==3.10.9
+seaborn==0.13.2
+
+# Optional: useful for downloading/checkpoint management; not required by the basic training loop.
+gdown==6.1.0
+
+# Optional official V-JEPA repo extras.
+# These are listed by external/vjepa2_official/requirements.txt, but were not all installed
+# in the environment that successfully imported and ran the basic V-JEPA2.1 300M script.
+# Install them only if you need the full official repo training/evaluation utilities.
+# tensorboard
+# wandb
+# iopath
+# submitit
+# braceexpand
+# webdataset
+# decord
+# beartype
+# h5py
+# fire
+# python-box
+# scikit-image
+# ftfy
+# jupyter
