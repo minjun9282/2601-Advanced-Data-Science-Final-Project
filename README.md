@@ -36,7 +36,7 @@ For academic review or reproducibility verification, the following materials may
 - evaluation output format
 - limited metadata needed to verify the reported experimental pipeline
 
-Requests can be made by contacting the repository owner. The requester may be required to separately obtain the Nexar dataset and V-JEPA 2.1 checkpoint according to their respective licenses.
+Requests can be made by contacting the repository owner:minjun9282@khu.ac.kr. The requester may be required to separately obtain the Nexar dataset and V-JEPA 2.1 checkpoint according to their respective licenses.
 
 ## Project Summary
 
@@ -211,6 +211,7 @@ Expected directory structure:
 2601-Advanced-Data-Science-Final-Project/
 ├── README.md
 ├── LICENSE
+├── requirements.txt
 ├── train_vjepa21_7fields_collision_for_v2_supervised.py
 ├── output2/
 │   └── labels_for_vjepa_v2_supervised.jsonl        # not included
